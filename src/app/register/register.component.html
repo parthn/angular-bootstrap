@@ -1,0 +1,99 @@
+<div class="container">
+    <span>{{errors}}</span>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <h1>Register</h1>
+        <div class="form-group">
+            <input type="text" name="first_name" formControlName="first_name" class="form-control"  placeholder="First Name">
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.first_name.touched || submitted) && registerFormControls.first_name.errors">
+                First Name is <strong>required</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" name="last_name" formControlName="last_name" class="form-control"  placeholder="Last Name">
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.last_name.touched || submitted) && registerFormControls.last_name.errors">
+                Last Name is <strong>required</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="email" name="email" formControlName="email" class="form-control"  placeholder="Email">
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.email.touched || submitted) && registerFormControls.email.errors">
+                Email is <strong>required</strong>
+            </div>
+            <div class="alert-danger px-2" *ngIf="registerFormControls.email.errors && registerFormControls.email.errors.email">
+                Please enter a valid email address
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="date" name="dob_date" formControlName="dob_date" class="form-control"  placeholder="DOB Date">
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.dob_date.touched || submitted) && registerFormControls.dob_date.errors">
+                DOB Date is <strong>required</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <select name="designation_id" formControlName="designation_id" class="form-control"  placeholder="Designation">
+                <option disabled selected [ngValue]="">Select Designation</option>
+                <option *ngFor="let item of designation_arr.data" [ngValue]="item.id">{{item.name}}</option>
+            </select>
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.designation_id.touched || submitted) && registerFormControls.designation_id.errors">
+                Designation is <strong>required</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <div formArrayName="mobiles">
+                <div *ngFor="let item of getMobilephone.controls; let i=index; let last = last" [formGroupName]="i">
+                    <div class="form-group row">
+                        <div class="col-10">
+                            <input type="text"  name="mobile_no"  placeholder="Mobile No" formControlName="mobile_no" class="form-control" >
+                            <div class="alert-danger px-2" *ngIf="(item.controls.mobile_no.touched || submitted) && item.controls.mobile_no.errors && item.controls.mobile_no.errors.required" >
+                                Mobile No is <strong>required</strong>
+                            </div>
+                            <div class="alert-danger px-2" *ngIf="item.controls.mobile_no.errors && item.controls.mobile_no.errors.maxlength" >
+                                Please enter a Mobile No more than 12 numbers.
+                            </div>
+                            <div class="alert-danger px-2" *ngIf="item.controls.mobile_no.errors && item.controls.mobile_no.errors.minlength" >
+                                Please enter a Mobile No at least 10 numbers.
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-primary px-4 mr-3" *ngIf="i != 0 || !last" (click)="deleteMobile(i)"><strong>-</strong></button>
+                            <button type="button" class="btn btn-primary px-4 mr-3" *ngIf="last" (click)="addMobile()"><strong>+</strong></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" formControlName="password" class="form-control" placeholder="Password">
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.password.touched || submitted) && registerFormControls.password.errors && registerFormControls.password.errors.required" >
+                Password is <strong>required</strong>
+            </div>
+            <div class="alert-danger px-2" *ngIf="registerFormControls.password.errors && registerFormControls.password.errors.maxlength" >
+                Please enter a Password no more than 16 characters.
+            </div>
+            <div class="alert-danger px-2" *ngIf="registerFormControls.password.errors && registerFormControls.password.errors.minlength" >
+                Please enter a Password at least 6 characters.
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="password" name="confirm_password" formControlName="confirm_password" class="form-control" placeholder="Confirm Password">
+            <div class="alert-danger px-2" *ngIf="(registerFormControls.confirm_password.touched || submitted) && registerFormControls.confirm_password.errors && registerFormControls.confirm_password.errors.required" >
+                Confirm Password is <strong>required</strong>
+            </div>
+            <div class="alert-danger px-2" *ngIf="registerFormControls.confirm_password.errors && registerFormControls.confirm_password.errors.maxlength" >
+                Please enter a Confirm password no more than 16 characters.
+            </div>
+            <div class="alert-danger px-2" *ngIf="registerFormControls.confirm_password.errors && registerFormControls.confirm_password.errors.minlength" >
+                Please enter a Confirm password at least 6 characters.
+            </div>
+            <div class="alert-danger px-2" *ngIf="registerFormControls.confirm_password.errors && registerFormControls.confirm_password.errors.mustMatch" >
+                Confirm Password doesn't match to Password
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button type="submit" [disabled]="submitted" class="btn btn-primary px-4 mr-3">Register</button>
+                <button type="button" [routerLink]="['/login']" class="btn btn-primary px-4 mr-3">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
